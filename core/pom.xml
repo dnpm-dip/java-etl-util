@@ -10,8 +10,8 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <name>Core Java ETL Utility for DIP</name>
-  <artifactId>dnpm-dip-etl4j-core</artifactId>
+  <name>Java ETL Utility for Core DTOs</name>
+  <artifactId>etl4j-core</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 

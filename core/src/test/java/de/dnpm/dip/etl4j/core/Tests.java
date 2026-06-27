@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import static de.dnpm.dip.etl4j.core.Builders.*;
+import static de.dnpm.dip.etl4j.core.PatientBuilder.*;
 import de.dnpm.dip.model.*;
 
 
@@ -30,17 +30,17 @@ class Tests
 
   @Test
   public void testPatientBuilder(){
-    var pat = Patient(
+
+    var pat = PatientBuilder.create(
       new Id<>("12345678"),
-      anyValueOf(GENDERS),
+      GENDER.withName("male"),
       YearMonth.now().minusYears(RND.nextInt(74)),
       Optional.of(LocalDate.now()),
-      anyValueOf(HEALTH_INSURANCES),
+      HEALTH_INSURANCE_TYPE.withName("GKV"),
       Optional.empty()
     ); 
 
     System.out.println(pat);  
   }
-
 
 }
