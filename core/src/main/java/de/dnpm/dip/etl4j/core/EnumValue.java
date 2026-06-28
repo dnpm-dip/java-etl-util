@@ -28,7 +28,7 @@ public final class EnumValue<Tag>
     return new EnumValue<>(value);
   }
 
-  scala.Enumeration.Value unwrap(){
+  public scala.Enumeration.Value value(){
     return this.value;
   }
 

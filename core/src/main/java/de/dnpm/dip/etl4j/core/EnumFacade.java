@@ -22,9 +22,9 @@ public final class EnumFacade<Tag> implements EnumValue.Resolver<Tag>
     this.values =
       CollectionConverters$.MODULE$
         .asJava(enumeration.values())
-	.stream()
-	.map(EnumValue::<Tag>of)
-	.collect(toUnmodifiableSet());
+        .stream()
+        .map(EnumValue::<Tag>of)
+        .collect(toUnmodifiableSet());
   }
 
   public static <Tag> EnumFacade<Tag> of(Enumeration enumeration){ 

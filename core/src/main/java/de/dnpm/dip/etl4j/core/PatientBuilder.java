@@ -21,10 +21,6 @@ public abstract class PatientBuilder
     CodedEnumFacade.of(HealthInsurance.Type$.MODULE$);
 
 
-  public static <T> Reference<T> Reference(Id<T> id){
-    return Reference$.MODULE$.apply(id);
-  }
-
 
   public static Patient create(
     Id<Patient> id,
@@ -38,13 +34,13 @@ public abstract class PatientBuilder
       id,
       toEnumCoding(GENDER.codingOf(gender)),
       birthDate,
-      toOption(dateOfDeath),
+      toScala(dateOfDeath),
       None,
       new Patient.Insurance(
         toEnumCoding(HEALTH_INSURANCE_TYPE.codingOf(healthInsuranceType)),
-	None
+        None
       ),
-      toOption(municipalityCode.map(Address::new))
+      toScala(municipalityCode.map(Address::new))
     );
   }
 

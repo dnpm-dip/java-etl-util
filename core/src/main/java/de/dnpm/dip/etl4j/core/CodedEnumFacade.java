@@ -64,7 +64,7 @@ public final class CodedEnumFacade<Tag> implements EnumValue.Resolver<Tag>
   }
 
   public Coding<Tag> codingOf(EnumValue<Tag> value){
-    return codingsByValue.get(value.unwrap());
+    return codingsByValue.get(value.value());
   }
 
   public Coding<Tag> codingOf(String code){
