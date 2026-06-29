@@ -8,10 +8,11 @@ import scala.Enumeration;
 import de.dnpm.dip.model.Id;
 import de.dnpm.dip.model.EpisodeOfCare;
 import de.dnpm.dip.model.Reference;
-import de.dnpm.dip.service.mvh.Consent;
-import de.dnpm.dip.service.mvh.Consent$Provision$Type$;
+import de.dnpm.dip.service.DataUpload;
 import de.dnpm.dip.service.mvh.BroadConsent;
 import de.dnpm.dip.service.mvh.BroadConsent$;
+import de.dnpm.dip.service.mvh.Consent;
+import de.dnpm.dip.service.mvh.Consent$Provision$Type$;
 import de.dnpm.dip.service.mvh.ModelProjectConsent;
 import de.dnpm.dip.service.mvh.Submission;
 import de.dnpm.dip.service.mvh.TransferTAN;
@@ -29,10 +30,12 @@ abstract class GenomDE
 
   private GenomDE(){}
 
+
   public static interface ConsentProvisionType { }
   public static interface ModelProjectConsentPurpose { }
   public static interface SubmissionType { }
   public static interface BroadConsentReasonMissing { }
+
 
 
   public static final EnumFacade<ModelProjectConsentPurpose> MODEL_PROJECT_PURPOSE =
@@ -61,7 +64,7 @@ abstract class GenomDE
     );
   }
   
-  public ModelProjectConsent modelProjectConsent(
+  public static ModelProjectConsent modelProjectConsent(
     String version,
     Optional<LocalDate> date,
     List<Consent.Provision<Enumeration.Value>> provisions
@@ -78,12 +81,17 @@ abstract class GenomDE
     BroadConsent$.MODULE$.reads();
 
 
-  public Submission.Metadata submissionMetadata(
+  public static BroadConsent researchConsent(String fhirJsonConsent){
+    return READS_BC.reads(Json.parse(fhirJsonConsent)).get();  //TODO: reconsider using this unsafe operation get() here
+  }
+
+
+  public static Submission.Metadata submissionMetadata(
     EnumValue<SubmissionType> type,
     Id<TransferTAN> tan,
     Optional<Id<EpisodeOfCare>> episodeOfCare,
     ModelProjectConsent mvConsent,
-    Optional<List<JsObject>> researchConsents,
+    Optional<List<BroadConsent>> researchConsents,
     Optional<EnumValue<BroadConsentReasonMissing>> missingBCReason
   ){
     return new Submission.Metadata(
@@ -93,12 +101,7 @@ abstract class GenomDE
       mvConsent,
       toScala(
         researchConsents.map(
-          bcs -> toScala(
-	    bcs.stream()
-	      .map(READS_BC::reads)
-	      .map(r -> r.get())
-	      .toList()
-	  )
+          bcs -> toScala(bcs)
         )
       ),
       toScala(missingBCReason.map(EnumValue::value))

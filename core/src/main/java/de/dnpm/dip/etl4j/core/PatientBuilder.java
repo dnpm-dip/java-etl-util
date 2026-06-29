@@ -4,7 +4,13 @@ package de.dnpm.dip.etl4j.core;
 import java.time.YearMonth;
 import java.time.LocalDate;
 import java.util.Optional;
-import de.dnpm.dip.model.*;
+import de.dnpm.dip.model.Address;
+import de.dnpm.dip.model.Gender;
+import de.dnpm.dip.model.Gender$;
+import de.dnpm.dip.model.HealthInsurance;
+import de.dnpm.dip.model.Id;
+import de.dnpm.dip.model.Patient;
+import de.dnpm.dip.model.Reference;
 import static de.dnpm.dip.etl4j.core.Adapters.*;
 
 
@@ -13,11 +19,13 @@ public abstract class PatientBuilder
 
   private PatientBuilder(){}
 
+  public static interface HealthInsuranceType{}
+
 
   public static final CodedEnumFacade<Gender> GENDER =
     CodedEnumFacade.of(Gender$.MODULE$);
 
-  public static final CodedEnumFacade<HealthInsurance> HEALTH_INSURANCE_TYPE =
+  public static final CodedEnumFacade<HealthInsuranceType> HEALTH_INSURANCE_TYPE =
     CodedEnumFacade.of(HealthInsurance.Type$.MODULE$);
 
 
@@ -27,7 +35,8 @@ public abstract class PatientBuilder
     EnumValue<Gender> gender,
     YearMonth birthDate,
     Optional<LocalDate> dateOfDeath,
-    EnumValue<HealthInsurance> healthInsuranceType,
+    EnumValue<HealthInsuranceType> healthInsuranceType,
+    Optional<Reference<HealthInsurance>> healthInsurance,
     Optional<String> municipalityCode
   ){
     return new Patient(
@@ -38,7 +47,7 @@ public abstract class PatientBuilder
       None,
       new Patient.Insurance(
         toEnumCoding(HEALTH_INSURANCE_TYPE.codingOf(healthInsuranceType)),
-        None
+        toScala(healthInsurance)
       ),
       toScala(municipalityCode.map(Address::new))
     );
