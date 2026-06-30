@@ -12,6 +12,7 @@ import de.dnpm.dip.model.Id;
 import de.dnpm.dip.model.Patient;
 import de.dnpm.dip.model.Reference;
 import static de.dnpm.dip.etl4j.core.Adapters.*;
+import static de.dnpm.dip.etl4j.core.Codings.*;
 
 
 public abstract class PatientBuilder

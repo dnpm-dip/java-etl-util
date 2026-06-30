@@ -18,9 +18,7 @@ public final class CodedEnumFacade<Tag> implements EnumValue.Resolver<Tag>
 
   private final CodedEnum codedEnum;
 
-  private final Set<EnumValue<Tag>> values;
-
-  private final Map<scala.Enumeration.Value,Coding<Tag>> codingsByValue; 
+  private final Map<EnumValue<Tag>,Coding<Tag>> codingsByValue; 
 
 
   private CodedEnumFacade(CodedEnum codedEnum){
@@ -34,19 +32,12 @@ public final class CodedEnumFacade<Tag> implements EnumValue.Resolver<Tag>
           .concepts()
           .map(
             concept -> new Tuple2(
-              codedEnum.toEnumValue(concept.code()),
+              EnumValue.of(codedEnum.toEnumValue(concept.code())),
               concept.toCoding(codedEnum.system().uri())
             )
           )
       )
     );
-
-    this.values =
-      CollectionConverters$.MODULE$
-        .asJava(codedEnum.values())
-        .stream()
-        .map(EnumValue::<Tag>of)
-        .collect(toUnmodifiableSet());
   }
 
   public static <Tag> CodedEnumFacade<Tag> of(CodedEnum codedEnum){ 
@@ -60,11 +51,11 @@ public final class CodedEnumFacade<Tag> implements EnumValue.Resolver<Tag>
 
   @Override
   public Set<EnumValue<Tag>> values(){
-    return values;
+    return codingsByValue.keySet();
   }
 
   public Coding<Tag> codingOf(EnumValue<Tag> value){
-    return codingsByValue.get(value.value());
+    return codingsByValue.get(value);
   }
 
   public Coding<Tag> codingOf(String code){

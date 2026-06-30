@@ -40,6 +40,7 @@
   <modules>
     <module>core</module>
     <module>genom-de</module>
+    <module>rd</module>
   </modules>
 
   <dependencies>

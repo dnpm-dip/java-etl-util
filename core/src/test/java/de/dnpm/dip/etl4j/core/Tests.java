@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import static de.dnpm.dip.etl4j.core.BaseTypes.*;
 import static de.dnpm.dip.etl4j.core.PatientBuilder.*;
 import de.dnpm.dip.model.*;
 
@@ -37,6 +38,7 @@ class Tests
       YearMonth.now().minusYears(RND.nextInt(74)),
       Optional.of(LocalDate.now()),
       HEALTH_INSURANCE_TYPE.withName("GKV"),
+      Optional.of(reference(new Id<>("AOK"))),
       Optional.empty()
     ); 
 
